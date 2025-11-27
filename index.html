@@ -35,7 +35,7 @@
 
       <div class="kepada-yth w-1 mx-auto justify-content-center align-items-center">
         <p class="kpd-sdr">Kepada Yth: Bpk/Ibu/Saudara/I,</p>
-        <p class="tamu">Tamu Undangan</p>
+        <p id="guest-name" class="tamu">Tamu Undangan</p>
       </div>
 
       <div class="ha-mundur">
@@ -427,6 +427,24 @@
         bsOffcanvas.hide();
       });
     });
+  </script>
+
+  <!-- URL-driven guest name: reads ?tamu=Nama or ?to=Nama or ?name=Nama and updates the guest text -->
+  <script>
+    (function () {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const raw = params.get('tamu') || params.get('to') || params.get('name');
+        if (!raw) return;
+        // URLSearchParams already decodes percent-encoding; replace + with space just in case
+        const name = raw.replace(/\+/g, ' ');
+        const el = document.getElementById('guest-name');
+        if (el) el.textContent = name || el.textContent;
+      } catch (e) {
+        // silent fail
+        console.error('guest name parse error', e);
+      }
+    })();
   </script>
 
 </body>
